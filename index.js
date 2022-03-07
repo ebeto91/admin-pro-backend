@@ -12,16 +12,20 @@ const cors=require('cors');
 const app=express();
 app.use(cors());
 
+//Lectura y paerseo del body, colocar esta linea de condigo siempre, antes deñ codigo de las rutas.
+app.use(express.json());
+
 //base de datos
 dbConnection();
 
-app.get('/',(req,res)=>{
-    res.json({
-        ok:true,
-        msg:'hola mundo'
-    })
-})
+
+//Rutas
+//Middleware dentro de rutas
+
+app.use('/api/usuarios', require('./routes/usuarios'))
+app.use('/api/login',require('./routes/auth'))
+
 
 app.listen(process.env.PORT,()=>{
-    console.log('servidor corriendo en puerto'+process.env.PORT)
+    console.log('servidor corriendo en puerto '+process.env.PORT)
 })

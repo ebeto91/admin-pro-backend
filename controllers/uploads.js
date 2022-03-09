@@ -24,6 +24,7 @@ if(!tiposValidos.includes(tipo)){
 await existeCarpeta()
 
 //Validar que exista un archivo
+//Link de interes: https://github.com/richardgirges/express-fileupload/tree/master/example#basic-file-upload
 if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).json({
         ok:false,
@@ -89,6 +90,8 @@ const pathImg=path.join(__dirname,`../uploads/${tipo}/${foto}`);
 
 if(fs.existsSync(pathImg)) res.sendFile(pathImg);
 else{
+ //path.join =>se usa para la ruta absoluta 
+ //Link de interes: https://stackoverflow.com/questions/39110801/path-join-vs-path-resolve-with-dirname
  const pathImg=path.join(__dirname,`../uploads/${ImagenPorDefecto}`);
  res.sendFile(pathImg);
 }

@@ -12,16 +12,47 @@ const { generarJWT } = require('../helpers/jwt');
 
 //Listar Todos
 const getUsuarios= async (req,res)=>{
+
+    //Paginacion inicio
+    const desde=Number(req.query.desde)||0;
     //Esto es un filtro
     //{}, 'los campos que se desean mostrar'
-    const usuarios= await Usuario.find({},'nombre email role google password')
+   /* const usuarios= await Usuario
+                                 .find({},'nombre email role google password')
+                                 .skip(desde)
+                                 .limit(5);
+   */
+
+     //const totalUsuarios=await Usuario.count(); 
+     
+    
+
+    //se utilza la promesa para que el listar todo y el count se ejecuten al mismo timepo
+    //se implementa desestructuracio de arreglo y objetos de js, para asignar cada resultado a las 
+    //variables [usuarios, totalUsuarios]
+    //Link:https://www.freecodecamp.org/espanol/news/desestructuracion-de-arreglos-y-objetos-en-javascript/
+
+    const [usuarios, totalUsuarios]= await Promise.all([
+
+        //primera promesa
+        Usuario
+        .find({},'nombre email role google img password')
+        .skip(desde)
+        .limit(5),
+
+        //seguda promesa
+        Usuario.countDocuments()
+
+    ])
+     
 
     res.json({
         ok:true,
         usuarios,
         //data que viene del middleware validar-jwt.js
         uid:req.uid,
-        nombre:req.nombre
+        nombre:req.nombre,
+        totalUsuarios
     });
 }
 

@@ -18,6 +18,11 @@ app.use(express.json());
 //base de datos
 dbConnection();
 
+//Directorio Publico
+//Middleware
+app.use(express.static('public'));
+
+
 
 //Rutas
 //Middleware dentro de rutas

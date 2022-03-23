@@ -191,7 +191,21 @@ const actualizarUsuario=async (req,res=response)=>{
             
         }
        
-         campos.email=email
+         //Si no se loguea con cuenta de google se puede actualizar el corre, es decir si google es false.
+         if(!usuarioDB.google){
+            campos.email=email
+         }
+         //entra al if si la persona esta logueada con google y cambio el correo,Nota: hay una regla,
+         //no se puede editar el correo si la persona se loguea con la cuenta de google.
+         //Nota : igual en el front end en el perfil.component.html en el input email hay un readOnly,
+         //si la persona se loguea con gmail.
+         else if(usuarioDB.email !==email){
+             return res.status(400).json({
+                 ok:false,
+                 msg:'Usuario de google no puede cambiar su correo'
+             })
+         }
+        
          campos.role=role
         
 

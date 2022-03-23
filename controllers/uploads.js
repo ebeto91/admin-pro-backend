@@ -3,6 +3,7 @@ const { response } = require("express");
 const { existeCarpeta } = require('../helpers/createOrNotFolder');
 const { v4: uuidv4 } = require('uuid');
 const { actualizarImagen } = require('../helpers/actualizarImagen');
+const { existenciaDataDb } = require('../helpers/existenciaDataDb');
 
 //Este paquete es de node.js
 const path=require('path');
@@ -63,21 +64,26 @@ file.mv(path, (err)=> {
         })
     }
 
+  });
 
-    //Actualizar la base de datos
-    actualizarImagen(tipo,id,nombreArchivo);
+  //Actualizar la base de datos
+  const usuario= await actualizarImagen(tipo,id,nombreArchivo);
 
-
-    res.json({
-        ok:true,
-        msg:'Archivo Subido',
-        nombreArchivo
-    });
+  //nota si quiero usar un observable en el lado del front tengo que enviar el usuario en la respuesta,
+  //y si siguo el video de fernando seccion 15 video 190 no tengo que enviar el usuario solo 
+  //ok,msg y el nombreArchivo
+  res.json({
+      ok:true,
+      msg:'Archivo Subido',
+      nombreArchivo,
+      usuario
   });
 
 }
 
 
+
+//Get obtener la imagen
 const retornaImagen=(req,res=response)=>{
 
 const tipo=req.params.tipo;

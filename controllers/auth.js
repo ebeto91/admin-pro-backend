@@ -13,7 +13,7 @@ const login = async(req,res=response)=>{
        //verificar email
        const usuarioDB=await Usuario.findOne({email});
        if(!usuarioDB){
-           return res.status(404).json({
+           return res.status(401).json({
             ok:false,
             msg:'Email o contraseña no valido'
            })
@@ -25,7 +25,7 @@ const login = async(req,res=response)=>{
        //si llega a este punto verificar contraseña
        const validPassword= bcrypt.compareSync(password,usuarioDB.password);
        if(!validPassword){
-        return res.status(400).json({
+        return res.status(401).json({
             ok:false,
             msg:'Email o contraseña no valido'
            })
@@ -55,11 +55,12 @@ const login = async(req,res=response)=>{
 const googleSignIn=async(req,res=response)=>{
 
     const googleToken=req.body.token;
-
+     
     try {
 
        const {name,email,picture} = await googleVerify(googleToken);
 
+       console.log(picture)
        //Verificamos si el usuario se habia registrado previamente es otras palabras si existe.
        const usuarioDB=await Usuario.findOne({email});
        let usuario;
@@ -79,6 +80,7 @@ const googleSignIn=async(req,res=response)=>{
          //existe usuario
          usuario=usuarioDB;
          usuario.google=true;
+         usuario.img=picture;
          //si quiere mantener los 2 metodos de login tener comentado.
          //usuario.password='@@@'
        }
@@ -104,13 +106,27 @@ const googleSignIn=async(req,res=response)=>{
             msg:'Token incorrecto'
         })
     }
+}
 
+const renewToken= async (req,res=response)=>{
+
+const {uid,nombre}= req;
+
+const usuario=await Usuario.findById(uid);
+
+const token= await generarJWT(uid,nombre)
+
+res.json({
+    ok:true,
+    msg:'token renovado',
+    token,
+    usuario
     
-
-
+})
 }
 
 module.exports={
     login,
-    googleSignIn
+    googleSignIn,
+    renewToken
 }

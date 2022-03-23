@@ -19,6 +19,7 @@ const checkSubCarpetas = async()=>{
 
 const subCarpertas=['usuarios','hospitales','medicos'];
 
+//ESte if se ejecuta si no existe la carpeta padre, aqui se crean las subcarpetas usuarios,hospitales, medicos
 if(!existeCarpetaPadre){
 
     subCarpertas.forEach(subFolder => {
@@ -26,6 +27,7 @@ if(!existeCarpetaPadre){
         fs.mkdirSync(path);
     });
 
+//Si la carpeta padre ya existe
 }else{
     
     //Obtener todos los directorios dentro del directorio padre
@@ -51,7 +53,9 @@ if(!existeCarpetaPadre){
             //Link:https://www.codegrepper.com/code-examples/javascript/only+keep+duplicates+between+two+arrays+javascript
             //con el filter y el ! se obtine el o los elementos que nos estan duplicados en ambos arrays.
            let carpetafaltante = subCarpertas.filter(carpeta => !getDirectories.includes(carpeta));
-            carpetafaltante.forEach(subFolder => {
+           
+           //Aqui se crean las subcarpetas faltantes
+           carpetafaltante.forEach(subFolder => {
                 let path=`${dir}/${subFolder}`
                 fs.mkdirSync(path);
             });

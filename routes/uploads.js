@@ -16,6 +16,7 @@ const router = Router();
 //Inicializar el paquete
 router.use(expressfileUpload());
 
+//Ruta para actualizar la imagen
 router.put('/:tipo/:id',[validarJWT],fileUpload);
 
 //ruta para retornar la imagen

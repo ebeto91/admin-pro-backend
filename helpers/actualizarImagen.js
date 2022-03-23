@@ -22,7 +22,7 @@ const actualizarImagen=async (tipo,id,nombreArchivo)=>{
             borrarImagen(pathViejo)
             usuario.img=nombreArchivo;
             await usuario.save();
-            return true;
+            return usuario;
 
             break;
 

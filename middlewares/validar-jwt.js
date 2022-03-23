@@ -27,9 +27,22 @@ try {
     
     
 } catch (error) {
+
+   //se imprime para conocer el error
+   // console.log(error)
+
+    if(error.name === 'TokenExpiredError'){
+        return res.status(401).json({
+            ok:false,
+            msg:'El Token Caduco',
+        
+        })
+    }
+
     return res.status(401).json({
         ok:false,
-        msg:'token incorrecto'
+        msg:'token incorrecto',
+        error
     })
 }
 
